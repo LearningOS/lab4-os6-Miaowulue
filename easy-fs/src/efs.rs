@@ -161,4 +161,11 @@ impl EasyFileSystem {
             (block_id - self.data_area_start_block) as usize
         )
     }
+
+    pub fn get_id(&self, block_id: usize, block_offset: usize) -> usize {
+        let inode_size = core::mem::size_of::<DiskInode>();
+        let block_inodes = (BLOCK_SZ / inode_size) as usize;
+        let inode_block_num = block_id - self.inode_area_start_block as usize;
+        inode_block_num * block_inodes + block_offset / inode_size
+    }
 }
